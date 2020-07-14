@@ -1,33 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class Home extends StatelessWidget {
 
-  final _links = ['https://google.com'];
+  final _url = 'https://qiita.com/';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: _links.map((link) => _urlButton(context, link)).toList(),
-          ),
-        ),
-      )
+        child: WebViewContainer(_url),
+      ),
     );
   }
+}
 
-  Widget _urlButton(BuildContext context, String url) {
-    return Container(
-      padding: EdgeInsets.all(20.0),
-      child: FlatButton(
-        color: Theme.of(context).primaryColor,
-        padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
-        child: Text(url),
-        onPressed: () => _,
-      )
+class WebViewContainer extends StatefulWidget {
+  final url;
+
+  WebViewContainer(this.url);
+
+  @override
+  _WebViewContainerState createState() => _WebViewContainerState(this.url);
+}
+
+class _WebViewContainerState extends State<WebViewContainer> {
+  var _url;
+  final _key = UniqueKey();
+
+  _WebViewContainerState(this._url);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: WebView(
+              key: _key,
+              javascriptMode: JavascriptMode.unrestricted,
+              initialUrl: _url,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
